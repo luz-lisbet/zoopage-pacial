@@ -1,65 +1,54 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\Especie;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Request\EspecieController as EspecieControllerRequest;
 
-class EspecieControllerController extends Controller
+class EspecieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @author PlantUmlGen
-     * @param EspecieControllerRequest\EspecieControllerIndexRequest $request
-     * @return JsonResponse
-     */
-    public function index(EspecieControllerRequest\EspecieControllerIndexRequest $request): JsonResponse
+    public function index()
     {
-        return $request->response();
+        $especies = Especie::all();
+        return response()->json(['especies' => $especies], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @author PlantUmlGen
-     * @param EspecieControllerRequest\EspecieControllerUpdateRequest $request
-     * @return JsonResponse
-     */
-    public function update(EspecieControllerRequest\EspecieControllerUpdateRequest $request): JsonResponse
+    public function store(Request $request)
     {
-        return $request->response();
+        $request->validate([
+            'nombre' => 'required|string',
+        ]);
+
+        $especie = Especie::create([
+            'nombre' => $request->nombre,
+        ]);
+
+        return response()->json(['especie' => $especie, 'message' => 'Especie creada correctamente'], 201);
     }
 
-    /**
-     * Display the specified resource.
-     * @author PlantUmlGen
-     * @param EspecieControllerRequest\EspecieControllerShowRequest $request
-     * @return JsonResponse
-     */
-    public function show(EspecieControllerRequest\EspecieControllerShowRequest $request): JsonResponse
+    public function show(Especie $especie)
     {
-        return $request->response();
+        return response()->json(['especie' => $especie], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @author PlantUmlGen
-     * @param EspecieControllerRequest\EspecieControllerDestroyRequest $request
-     * @return JsonResponse
-     */
-    public function destroy(EspecieControllerRequest\EspecieControllerDestroyRequest $request): JsonResponse
+    public function update(Request $request, Especie $especie)
     {
-        return $request->response();
+        $request->validate([
+            'nombre' => 'required|string',
+        ]);
+
+        $especie->update([
+            'nombre' => $request->nombre,
+        ]);
+
+        return response()->json(['especie' => $especie, 'message' => 'Especie actualizada correctamente'], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @author PlantUmlGen
-     * @param EspecieControllerRequest\EspecieControllerStoreRequest $request
-     * @return JsonResponse
-     */
-    public function store(EspecieControllerRequest\EspecieControllerStoreRequest $request): JsonResponse
+    public function destroy(Especie $especie)
     {
-        return $request->response();
+        $especie->delete();
+
+        return response()->json(['message' => 'Especie eliminada correctamente'], 200);
     }
 }

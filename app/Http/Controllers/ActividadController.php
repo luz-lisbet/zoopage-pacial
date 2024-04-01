@@ -1,65 +1,68 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\Actividad;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Request\ActividadController as ActividadControllerRequest;
 
-class ActividadControllerController extends Controller
+class ActividadController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @author PlantUmlGen
-     * @param ActividadControllerRequest\ActividadControllerIndexRequest $request
-     * @return JsonResponse
-     */
-    public function index(ActividadControllerRequest\ActividadControllerIndexRequest $request): JsonResponse
+    public function index()
     {
-        return $request->response();
+        $actividades = Actividad::all();
+        return response()->json(['actividades' => $actividades], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @author PlantUmlGen
-     * @param ActividadControllerRequest\ActividadControllerUpdateRequest $request
-     * @return JsonResponse
-     */
-    public function update(ActividadControllerRequest\ActividadControllerUpdateRequest $request): JsonResponse
+    public function create()
     {
-        return $request->response();
+        // No se necesita implementar para la API
     }
 
-    /**
-     * Display the specified resource.
-     * @author PlantUmlGen
-     * @param ActividadControllerRequest\ActividadControllerShowRequest $request
-     * @return JsonResponse
-     */
-    public function show(ActividadControllerRequest\ActividadControllerShowRequest $request): JsonResponse
+    public function store(Request $request)
     {
-        return $request->response();
+        $request->validate([
+            'dia' => 'required|string',
+            'horario' => 'required|string',
+        ]);
+
+        $actividad = Actividad::create([
+            'dia' => $request->dia,
+            'horario' => $request->horario,
+        ]);
+
+        return response()->json(['actividad' => $actividad, 'message' => 'Actividad creada correctamente'], 201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @author PlantUmlGen
-     * @param ActividadControllerRequest\ActividadControllerDestroyRequest $request
-     * @return JsonResponse
-     */
-    public function destroy(ActividadControllerRequest\ActividadControllerDestroyRequest $request): JsonResponse
+    public function show(Actividad $actividad)
     {
-        return $request->response();
+        return response()->json(['actividad' => $actividad], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @author PlantUmlGen
-     * @param ActividadControllerRequest\ActividadControllerStoreRequest $request
-     * @return JsonResponse
-     */
-    public function store(ActividadControllerRequest\ActividadControllerStoreRequest $request): JsonResponse
+    public function edit(Actividad $actividad)
     {
-        return $request->response();
+        // No se necesita implementar para la API
+    }
+
+    public function update(Request $request, Actividad $actividad)
+    {
+        $request->validate([
+            'dia' => 'required|string',
+            'horario' => 'required|string',
+        ]);
+
+        $actividad->update([
+            'dia' => $request->dia,
+            'horario' => $request->horario,
+        ]);
+
+        return response()->json(['actividad' => $actividad, 'message' => 'Actividad actualizada correctamente'], 200);
+    }
+
+    public function destroy(Actividad $actividad)
+    {
+        $actividad->delete();
+
+        return response()->json(['message' => 'Actividad eliminada correctamente'], 200);
     }
 }

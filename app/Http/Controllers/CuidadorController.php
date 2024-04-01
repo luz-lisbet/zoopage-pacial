@@ -1,65 +1,58 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\Cuidador;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Request\CuidadorController as CuidadorControllerRequest;
 
-class CuidadorControllerController extends Controller
+class CuidadorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @author PlantUmlGen
-     * @param CuidadorControllerRequest\CuidadorControllerIndexRequest $request
-     * @return JsonResponse
-     */
-    public function index(CuidadorControllerRequest\CuidadorControllerIndexRequest $request): JsonResponse
+    public function index()
     {
-        return $request->response();
+        $cuidadores = Cuidador::all();
+        return response()->json(['cuidadores' => $cuidadores], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @author PlantUmlGen
-     * @param CuidadorControllerRequest\CuidadorControllerUpdateRequest $request
-     * @return JsonResponse
-     */
-    public function update(CuidadorControllerRequest\CuidadorControllerUpdateRequest $request): JsonResponse
+    public function store(Request $request)
     {
-        return $request->response();
+        $request->validate([
+            'nombre' => 'required|string',
+            'especialidad' => 'required|string',
+        ]);
+
+        $cuidador = Cuidador::create([
+            'nombre' => $request->nombre,
+            'especialidad' => $request->especialidad,
+        ]);
+
+        return response()->json(['cuidador' => $cuidador, 'message' => 'Cuidador creado correctamente'], 201);
     }
 
-    /**
-     * Display the specified resource.
-     * @author PlantUmlGen
-     * @param CuidadorControllerRequest\CuidadorControllerShowRequest $request
-     * @return JsonResponse
-     */
-    public function show(CuidadorControllerRequest\CuidadorControllerShowRequest $request): JsonResponse
+    public function show(Cuidador $cuidador)
     {
-        return $request->response();
+        return response()->json(['cuidador' => $cuidador], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @author PlantUmlGen
-     * @param CuidadorControllerRequest\CuidadorControllerDestroyRequest $request
-     * @return JsonResponse
-     */
-    public function destroy(CuidadorControllerRequest\CuidadorControllerDestroyRequest $request): JsonResponse
+    public function update(Request $request, Cuidador $cuidador)
     {
-        return $request->response();
+        $request->validate([
+            'nombre' => 'required|string',
+            'especialidad' => 'required|string',
+        ]);
+
+        $cuidador->update([
+            'nombre' => $request->nombre,
+            'especialidad' => $request->especialidad,
+        ]);
+
+        return response()->json(['cuidador' => $cuidador, 'message' => 'Cuidador actualizado correctamente'], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @author PlantUmlGen
-     * @param CuidadorControllerRequest\CuidadorControllerStoreRequest $request
-     * @return JsonResponse
-     */
-    public function store(CuidadorControllerRequest\CuidadorControllerStoreRequest $request): JsonResponse
+    public function destroy(Cuidador $cuidador)
     {
-        return $request->response();
+        $cuidador->delete();
+
+        return response()->json(['message' => 'Cuidador eliminado correctamente'], 200);
     }
 }

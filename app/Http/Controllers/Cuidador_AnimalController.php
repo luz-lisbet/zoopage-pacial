@@ -1,65 +1,58 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\CuidadorAnimal;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Request\Cuidador_AnimalController as Cuidador_AnimalControllerRequest;
 
-class Cuidador_AnimalControllerController extends Controller
+class CuidadorAnimalController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @author PlantUmlGen
-     * @param Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerIndexRequest $request
-     * @return JsonResponse
-     */
-    public function index(Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerIndexRequest $request): JsonResponse
+    public function index()
     {
-        return $request->response();
+        $cuidadorAnimales = CuidadorAnimal::all();
+        return response()->json(['cuidadorAnimales' => $cuidadorAnimales], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @author PlantUmlGen
-     * @param Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerUpdateRequest $request
-     * @return JsonResponse
-     */
-    public function update(Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerUpdateRequest $request): JsonResponse
+    public function store(Request $request)
     {
-        return $request->response();
+        $request->validate([
+            'cuidador_id' => 'required|exists:cuidadores,id',
+            'animal_id' => 'required|exists:animals,id',
+        ]);
+
+        $cuidadorAnimal = CuidadorAnimal::create([
+            'cuidador_id' => $request->cuidador_id,
+            'animal_id' => $request->animal_id,
+        ]);
+
+        return response()->json(['cuidadorAnimal' => $cuidadorAnimal, 'message' => 'Vínculo entre cuidador y animal creado correctamente'], 201);
     }
 
-    /**
-     * Display the specified resource.
-     * @author PlantUmlGen
-     * @param Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerShowRequest $request
-     * @return JsonResponse
-     */
-    public function show(Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerShowRequest $request): JsonResponse
+    public function show(CuidadorAnimal $cuidadorAnimal)
     {
-        return $request->response();
+        return response()->json(['cuidadorAnimal' => $cuidadorAnimal], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @author PlantUmlGen
-     * @param Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerDestroyRequest $request
-     * @return JsonResponse
-     */
-    public function destroy(Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerDestroyRequest $request): JsonResponse
+    public function update(Request $request, CuidadorAnimal $cuidadorAnimal)
     {
-        return $request->response();
+        $request->validate([
+            'cuidador_id' => 'required|exists:cuidadores,id',
+            'animal_id' => 'required|exists:animals,id',
+        ]);
+
+        $cuidadorAnimal->update([
+            'cuidador_id' => $request->cuidador_id,
+            'animal_id' => $request->animal_id,
+        ]);
+
+        return response()->json(['cuidadorAnimal' => $cuidadorAnimal, 'message' => 'Vínculo entre cuidador y animal actualizado correctamente'], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @author PlantUmlGen
-     * @param Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerStoreRequest $request
-     * @return JsonResponse
-     */
-    public function store(Cuidador_AnimalControllerRequest\Cuidador_AnimalControllerStoreRequest $request): JsonResponse
+    public function destroy(CuidadorAnimal $cuidadorAnimal)
     {
-        return $request->response();
+        $cuidadorAnimal->delete();
+
+        return response()->json(['message' => 'Vínculo entre cuidador y animal eliminado correctamente'], 200);
     }
 }

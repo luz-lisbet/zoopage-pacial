@@ -1,65 +1,54 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\Recinto;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Request\RecintoController as RecintoControllerRequest;
 
-class RecintoControllerController extends Controller
+class RecintoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @author PlantUmlGen
-     * @param RecintoControllerRequest\RecintoControllerIndexRequest $request
-     * @return JsonResponse
-     */
-    public function index(RecintoControllerRequest\RecintoControllerIndexRequest $request): JsonResponse
+    public function index()
     {
-        return $request->response();
+        $recintos = Recinto::all();
+        return response()->json(['recintos' => $recintos], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @author PlantUmlGen
-     * @param RecintoControllerRequest\RecintoControllerUpdateRequest $request
-     * @return JsonResponse
-     */
-    public function update(RecintoControllerRequest\RecintoControllerUpdateRequest $request): JsonResponse
+    public function store(Request $request)
     {
-        return $request->response();
+        $request->validate([
+            'capacidad' => 'required|integer',
+        ]);
+
+        $recinto = Recinto::create([
+            'capacidad' => $request->capacidad,
+        ]);
+
+        return response()->json(['recinto' => $recinto, 'message' => 'Recinto creado correctamente'], 201);
     }
 
-    /**
-     * Display the specified resource.
-     * @author PlantUmlGen
-     * @param RecintoControllerRequest\RecintoControllerShowRequest $request
-     * @return JsonResponse
-     */
-    public function show(RecintoControllerRequest\RecintoControllerShowRequest $request): JsonResponse
+    public function show(Recinto $recinto)
     {
-        return $request->response();
+        return response()->json(['recinto' => $recinto], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @author PlantUmlGen
-     * @param RecintoControllerRequest\RecintoControllerDestroyRequest $request
-     * @return JsonResponse
-     */
-    public function destroy(RecintoControllerRequest\RecintoControllerDestroyRequest $request): JsonResponse
+    public function update(Request $request, Recinto $recinto)
     {
-        return $request->response();
+        $request->validate([
+            'capacidad' => 'required|integer',
+        ]);
+
+        $recinto->update([
+            'capacidad' => $request->capacidad,
+        ]);
+
+        return response()->json(['recinto' => $recinto, 'message' => 'Recinto actualizado correctamente'], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @author PlantUmlGen
-     * @param RecintoControllerRequest\RecintoControllerStoreRequest $request
-     * @return JsonResponse
-     */
-    public function store(RecintoControllerRequest\RecintoControllerStoreRequest $request): JsonResponse
+    public function destroy(Recinto $recinto)
     {
-        return $request->response();
+        $recinto->delete();
+
+        return response()->json(['message' => 'Recinto eliminado correctamente'], 200);
     }
 }
