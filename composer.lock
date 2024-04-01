@@ -4,8 +4,60 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c491b8531eec05ba41a11d9276a5749",
+    "content-hash": "08b174fa17bd00774c69f76a3ac16b1e",
     "packages": [
+        {
+            "name": "brianpando/plantumlgen",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brianpando/plantUmlGen.git",
+                "reference": "0f95085a22e676a3a192d5746d236c42b5d1e762"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brianpando/plantUmlGen/zipball/0f95085a22e676a3a192d5746d236c42b5d1e762",
+                "reference": "0f95085a22e676a3a192d5746d236c42b5d1e762",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "3.8.x-dev",
+                "phpunit/phpunit": "^7"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Brianpando\\Plantumlgen\\PlantServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Brianpando\\Plantumlgen\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Brian Pando",
+                    "email": "unasbrian@gmail.com"
+                }
+            ],
+            "description": "package for code generate by plantUml Tool",
+            "support": {
+                "issues": "https://github.com/brianpando/plantUmlGen/issues",
+                "source": "https://github.com/brianpando/plantUmlGen/tree/master"
+            },
+            "time": "2024-04-01T02:34:37+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",
@@ -8125,7 +8177,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "brianpando/plantumlgen": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
