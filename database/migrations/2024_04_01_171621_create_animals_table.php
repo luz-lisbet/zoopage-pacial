@@ -26,4 +26,3 @@ class CreateAnimalsTable extends Migration
         Schema::dropIfExists('animals');
     }
 }
-

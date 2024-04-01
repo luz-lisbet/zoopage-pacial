@@ -21,4 +21,3 @@ class CreateActividadesTable extends Migration
         Schema::dropIfExists('actividades');
     }
 }
-
